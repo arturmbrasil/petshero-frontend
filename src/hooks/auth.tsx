@@ -5,8 +5,17 @@ interface User {
   id: string;
   name: string;
   email: string;
+  whatsapp: string;
   avatar_url: string;
   is_ong: boolean;
+  address?: {
+    street: string;
+    number: string;
+    neighborhood: string;
+    city: string;
+    uf: string;
+    cep: string;
+  };
 }
 
 interface AuthState {

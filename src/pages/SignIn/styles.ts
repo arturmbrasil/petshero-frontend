@@ -53,6 +53,7 @@ export const AnimationContainer = styled.div`
       line-height: 63px;
 
       color: #f28759;
+      text-shadow: -4px 4px 7px rgb(242 135 89 / 50%);
     }
     a {
       color: #fff;
@@ -68,15 +69,16 @@ export const AnimationContainer = styled.div`
   > a {
     font-weight: 700;
 
-    color: #fff;
+    color: #f28759;
     display: block;
     margin-top: 24px;
     text-decoration: none;
     transition: color 0.2s;
     display: flex;
     align-items: center;
+    text-shadow: 0 0 5px rgb(242 135 89 / 50%);
     &:hover {
-      color: ${shade(0.2, '#FFF')};
+      color: ${shade(0.2, '#f28759')};
     }
     svg {
       margin-right: 16px;

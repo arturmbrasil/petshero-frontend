@@ -1,7 +1,13 @@
 import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import { NavLink } from 'react-router-dom';
-import { FiBarChart2, FiHome, FiLogOut, FiTrendingUp } from 'react-icons/fi';
+import {
+  FiBarChart2,
+  FiHome,
+  FiLogOut,
+  FiTrendingUp,
+  FiUser,
+} from 'react-icons/fi';
 
 import { useAuth } from '../../hooks/auth';
 
@@ -18,6 +24,11 @@ const NavBar: React.FC = () => {
         <NavLink className="menu-item" activeClassName="selected" to="/home">
           <FiHome />
           Home
+        </NavLink>
+
+        <NavLink className="menu-item" activeClassName="selected" to="/perfil">
+          <FiUser />
+          Meu Perfil
         </NavLink>
 
         <NavLink className="menu-item" activeClassName="selected" to="/ongs">
