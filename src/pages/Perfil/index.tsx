@@ -4,6 +4,7 @@ import React, {
   useState,
   useRef,
   ChangeEvent,
+  useMemo,
 } from 'react';
 import {
   FiMail,
@@ -49,6 +50,10 @@ const Perfil: React.FC = () => {
 
   const { user, updateUser } = useAuth();
 
+  const phoneRegExp = useMemo(() => {
+    return /(\(?\d{2}\)?\s?)(\d{4,5}-?\d{4})$/;
+  }, []);
+
   const handleSubmit = useCallback(
     async (data: ProfileFormData) => {
       try {
@@ -56,7 +61,9 @@ const Perfil: React.FC = () => {
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Nome obrigatório'),
-          whatsapp: Yup.string().required('WhatsApp obrigatório'),
+          whatsapp: Yup.string()
+            .matches(phoneRegExp, 'Formato(xx xxxxx-xxxx)')
+            .required('WhatsApp obrigatório'),
           email: Yup.string()
             .required('E-mail obrigatório')
             .email('Digite um e-mail válido'),
@@ -129,7 +136,7 @@ const Perfil: React.FC = () => {
         });
       }
     },
-    [addToast, history, updateUser],
+    [addToast, history, phoneRegExp, updateUser],
   );
 
   const handleAvatarChange = useCallback(

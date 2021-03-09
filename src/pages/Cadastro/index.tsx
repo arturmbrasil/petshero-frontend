@@ -83,7 +83,7 @@ const Cadastro: React.FC = () => {
         });
       }
     },
-    [addToast, history],
+    [addToast, history, isOng, phoneRegExp],
   );
 
   const handleIsOngChange = useCallback(() => {
