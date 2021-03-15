@@ -56,7 +56,10 @@ const Home: React.FC = () => {
         },
       })
       .then((response) => {
-        setLostAnimals(response.data);
+        if (response.data.length > 9) {
+          const arrayNovo = response.data.slice(0, 9);
+          setLostAnimals(arrayNovo);
+        } else setLostAnimals(response.data);
       });
 
     window.addEventListener('resize', handleWindowSizeChange);
