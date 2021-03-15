@@ -21,6 +21,13 @@ import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import dogImg from '../../assets/dog.jpg';
 
+interface LostAnimal {
+  id: string;
+  name: string;
+  description: string;
+  avatar_url: string | null;
+}
+
 const Home: React.FC = () => {
   const { user, updateUser } = useAuth();
   const history = useHistory();
@@ -28,9 +35,11 @@ const Home: React.FC = () => {
   const isMobile: boolean = width <= 900;
   const carouselRef = useRef(null);
 
+  const [lostAnimals, setLostAnimals] = useState<LostAnimal[]>([]);
+
   const handleClickAnimalPerdido = useCallback(
-    (id: number) => {
-      history.push(`/ong/${id}`);
+    (animal: LostAnimal) => {
+      history.push(`/ong/${animal.id}`);
     },
     [history],
   );
@@ -40,6 +49,16 @@ const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    api
+      .get(`/lost-animals`, {
+        params: {
+          found: false,
+        },
+      })
+      .then((response) => {
+        setLostAnimals(response.data);
+      });
+
     window.addEventListener('resize', handleWindowSizeChange);
     return () => {
       window.removeEventListener('resize', handleWindowSizeChange);
@@ -68,50 +87,16 @@ const Home: React.FC = () => {
             itemsToShow={isMobile ? 1 : 3}
             disableArrowsOnEnd={false}
           >
-            <AnimalPerdido onClick={() => handleClickAnimalPerdido(0)}>
-              <img src={dogImg} alt="Animal perdido" />
-              <h3>Bolt</h3>
-              <h5>
-                O Supercão! Essa é a descrição do animal perdido. Lorem ipsum
-                dolor sit amet consectetur adipisicing elit. Ullam distinctio
-                eos atque itaque? Quam fuga officia dolores nostrum maxime
-                repudiandae id aliquid dolor numquam quia eveniet, explicabo
-                esse, earum pariatur?
-              </h5>
-            </AnimalPerdido>
-            <AnimalPerdido onClick={() => handleClickAnimalPerdido(0)}>
-              <img src={dogImg} alt="Animal perdido" />
-              <h3>Bolt</h3>
-              <h5>
-                O Supercão! Essa é a descrição do animal perdido. Lorem ipsum
-                dolor sit amet consectetur adipisicing elit. Ullam distinctio
-                eos atque itaque? Quam fuga officia dolores nostrum maxime
-                repudiandae id aliquid dolor numquam quia eveniet, explicabo
-                esse, earum pariatur?
-              </h5>
-            </AnimalPerdido>
-            <AnimalPerdido onClick={() => handleClickAnimalPerdido(0)}>
-              <img src={dogImg} alt="Animal perdido" />
-              <h3>Bolt</h3>
-              <h5>
-                O Supercão! Essa é a descrição do animal perdido. Lorem ipsum
-                dolor sit amet consectetur adipisicing elit. Ullam distinctio
-                eos atque itaque? Quam fuga officia dolores nostrum maxime
-                repudiandae id aliquid dolor numquam quia eveniet, explicabo
-                esse, earum pariatur?
-              </h5>
-            </AnimalPerdido>
-            <AnimalPerdido onClick={() => handleClickAnimalPerdido(0)}>
-              <img src={dogImg} alt="Animal perdido" />
-              <h3>Bolt</h3>
-              <h5>
-                O Supercão! Essa é a descrição do animal perdido. Lorem ipsum
-                dolor sit amet consectetur adipisicing elit. Ullam distinctio
-                eos atque itaque? Quam fuga officia dolores nostrum maxime
-                repudiandae id aliquid dolor numquam quia eveniet, explicabo
-                esse, earum pariatur?
-              </h5>
-            </AnimalPerdido>
+            {lostAnimals.map((animal) => (
+              <AnimalPerdido
+                key={animal.id}
+                onClick={() => handleClickAnimalPerdido(animal)}
+              >
+                <img src={animal.avatar_url || dogImg} alt={animal.name} />
+                <h3>{animal.name}</h3>
+                <h5>{animal.description}</h5>
+              </AnimalPerdido>
+            ))}
           </Carousel>
           <Button
             type="button"
