@@ -1,9 +1,12 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { shade } from 'polished';
 
+interface InfoProps {
+  isFocused: boolean;
+}
 export const Container = styled.div``;
 
-export const Content = styled.div`
+export const Content = styled.div<InfoProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,6 +18,7 @@ export const Content = styled.div`
     font-family: 'Open Sans';
     font-weight: 600;
     color: #f28759;
+    /* margin-bottom: 24px; */
     text-align: center;
     margin-left: 10px;
     margin-right: 10px;
@@ -34,6 +38,46 @@ export const Content = styled.div`
     transition: background-color 0.2s;
     &:hover {
       background-color: ${shade(0.2, '#f28759')};
+    }
+  }
+  .animaisEncontrados {
+    margin-bottom: 16px;
+    text-decoration: none;
+    color: #f28759;
+    transition: color 0.2s;
+    &:hover {
+      color: ${shade(0.2, '#f28759')};
+    }
+  }
+  .inputDiv {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background-color: #fbfbfb;
+    /* filter: drop-shadow(0px 2px 10px rgba(0, 0, 0, 0.25)); */
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 350px;
+    display: flex;
+    align-items: center;
+    border: 2px solid #aaa;
+    color: #999999;
+    ${(props) =>
+      props.isFocused &&
+      css`
+        border: 2px solid #2c73e9;
+        color: #2c73e9;
+      `}
+    input {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      color: #000000;
+      &::placeholder {
+        color: #999999;
+      }
+    }
+    svg {
+      margin-right: 16px;
     }
   }
   /* form {
@@ -76,13 +120,13 @@ export const Content = styled.div`
   } */
 `;
 
-export const ListaAnimaisPerdidos = styled.div`
+export const ListaAnimaisEncontrados = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 `;
 
-export const AnimalPerdido = styled.div`
+export const AnimalEncontrado = styled.div`
   cursor: pointer;
   padding: 10px;
   background: white;
@@ -110,7 +154,7 @@ export const AnimalPerdido = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     color: #333333;
   }

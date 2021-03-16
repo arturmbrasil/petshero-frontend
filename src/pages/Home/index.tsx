@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 // @ts-ignore
-import Carousel from 'react-elastic-carousel';
-import { isBoolean } from 'util';
+// import Carousel from 'react-elastic-carousel';
 import {
   Container,
   Content,
@@ -31,22 +30,23 @@ interface LostAnimal {
 const Home: React.FC = () => {
   const { user, updateUser } = useAuth();
   const history = useHistory();
-  const [width, setWidth] = useState<number>(window.innerWidth);
-  const isMobile: boolean = width <= 900;
-  const carouselRef = useRef(null);
 
   const [lostAnimals, setLostAnimals] = useState<LostAnimal[]>([]);
 
+  // const breakPoints = [
+  //   { width: 1, itemsToShow: 1 },
+  //   { width: 750, itemsToShow: 2 },
+  //   { width: 1000, itemsToShow: 3 },
+  //   { width: 1500, itemsToShow: 4 },
+  //   { width: 2000, itemsToShow: 5 },
+  // ];
+
   const handleClickAnimalPerdido = useCallback(
     (animal: LostAnimal) => {
-      history.push(`/ong/${animal.id}`);
+      history.push(`/animais-perdidos/${animal.id}`);
     },
     [history],
   );
-
-  const handleWindowSizeChange = useCallback(() => {
-    setWidth(window.innerWidth);
-  }, []);
 
   useEffect(() => {
     api
@@ -56,16 +56,11 @@ const Home: React.FC = () => {
         },
       })
       .then((response) => {
-        if (response.data.length > 9) {
-          const arrayNovo = response.data.slice(0, 9);
+        if (response.data.length > 5) {
+          const arrayNovo = response.data.slice(0, 5);
           setLostAnimals(arrayNovo);
         } else setLostAnimals(response.data);
       });
-
-    window.addEventListener('resize', handleWindowSizeChange);
-    return () => {
-      window.removeEventListener('resize', handleWindowSizeChange);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -83,16 +78,17 @@ const Home: React.FC = () => {
             </span>
           </h1>
           <p>Você viu algum desses animais? Pode nos ajudar a encontrá-los?</p>
-          <Carousel
-            ref={carouselRef}
+          {/* <Carousel
+            breakPoints={breakPoints}
             showArrows={false}
             isRTL={false}
-            itemsToShow={isMobile ? 1 : 3}
             disableArrowsOnEnd={false}
-          >
-            {lostAnimals.map((animal) => (
+          > */}
+          <ListaAnimaisPerdidos>
+            {lostAnimals.map((animal, index) => (
               <AnimalPerdido
-                key={animal.id}
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
                 onClick={() => handleClickAnimalPerdido(animal)}
               >
                 <img src={animal.avatar_url || dogImg} alt={animal.name} />
@@ -100,11 +96,12 @@ const Home: React.FC = () => {
                 <h5>{animal.description}</h5>
               </AnimalPerdido>
             ))}
-          </Carousel>
+          </ListaAnimaisPerdidos>
+          {/* </Carousel> */}
           <Button
             type="button"
             onClick={() => {
-              console.log(isMobile);
+              history.push(`/animais-perdidos`);
             }}
           >
             VER TODOS

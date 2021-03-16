@@ -8,10 +8,8 @@ import Home from '../pages/Home';
 import Cadastro from '../pages/Cadastro';
 import Perfil from '../pages/Perfil';
 import Endereco from '../pages/Perfil/Endereco';
-// import Lojas from '../pages/Lojas';
-// import Cadastros from '../pages/Cadastros/Principal';
-// import Classes from '../pages/Cadastros/Classes';
-// import Produtos from '../pages/Cadastros/Produtos';
+import AnimaisPerdidos from '../pages/AnimaisPerdidos';
+import AnimaisEncontrados from '../pages/AnimaisEncontrados';
 
 const Routes: React.FC = () => {
   return (
@@ -26,13 +24,13 @@ const Routes: React.FC = () => {
 
       <Route path="/perfil/endereco" exact component={Endereco} isPrivate />
 
-      {/* <Route path="/minhas-lojas" component={Lojas} isPrivate /> */}
+      <Route path="/animais-perdidos" component={AnimaisPerdidos} isPrivate />
 
-      {/* <Route path="/cadastros" exact component={Cadastros} isPrivate />
-
-      <Route path="/cadastros/classes" exact component={Classes} isPrivate />
-
-      <Route path="/cadastros/produtos" exact component={Produtos} isPrivate /> */}
+      <Route
+        path="/animais-encontrados"
+        component={AnimaisEncontrados}
+        isPrivate
+      />
     </Switch>
   );
 };
