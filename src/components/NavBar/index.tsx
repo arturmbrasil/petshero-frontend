@@ -3,8 +3,11 @@ import { slide as Menu } from 'react-burger-menu';
 import { NavLink } from 'react-router-dom';
 import {
   FiBarChart2,
+  FiFrown,
   FiHome,
+  FiList,
   FiLogOut,
+  FiSmile,
   FiTrendingUp,
   FiUser,
 } from 'react-icons/fi';
@@ -32,11 +35,11 @@ const NavBar: React.FC = () => {
         </NavLink>
 
         <NavLink className="menu-item" activeClassName="selected" to="/ongs">
-          <FiBarChart2 />
+          <FiList />
           Ongs
         </NavLink>
         <NavLink className="menu-item" activeClassName="selected" to="/adocao">
-          <FiTrendingUp />
+          <FiSmile />
           Adoção
         </NavLink>
         <NavLink
@@ -52,7 +55,7 @@ const NavBar: React.FC = () => {
           activeClassName="selected"
           to="/animais-perdidos"
         >
-          <FiTrendingUp />
+          <FiFrown />
           Animais Perdidos
         </NavLink>
         <NavLink className="menu-item bordertop" onClick={signOut} to="/">

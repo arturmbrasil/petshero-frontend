@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FiArrowLeft, FiMail, FiLock, FiUser, FiPhone } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -33,7 +33,9 @@ const Cadastro: React.FC = () => {
 
   const [isOng, setIsOng] = useState<boolean>(false);
 
-  const phoneRegExp = /(\(?\d{2}\)?\s?)(\d{4,5}-?\d{4})$/;
+  const phoneRegExp = useMemo(() => {
+    return /(\(?\d{2}\)?\s?)(\d{4,5}-?\d{4})$/;
+  }, []);
 
   const handleSubmit = useCallback(
     async (data: CadastroFormData) => {

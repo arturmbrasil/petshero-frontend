@@ -17,7 +17,7 @@ import Header from '../../components/Header';
 import { useAuth } from '../../hooks/auth';
 
 import api from '../../services/api';
-import dogImg from '../../assets/dog.jpg';
+import dogImg from '../../assets/default.png';
 
 interface LostAnimal {
   id: string;
