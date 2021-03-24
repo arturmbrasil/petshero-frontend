@@ -2,7 +2,7 @@ import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import { NavLink } from 'react-router-dom';
 import {
-  FiBarChart2,
+  FiArrowRight,
   FiFrown,
   FiHome,
   FiList,
@@ -58,7 +58,36 @@ const NavBar: React.FC = () => {
           <FiFrown />
           Animais Perdidos
         </NavLink>
-        <NavLink className="menu-item bordertop" onClick={signOut} to="/">
+        <NavLink
+          className="menu-item bordertop"
+          activeClassName="selected"
+          to="/meus-animais"
+        >
+          <FiArrowRight />
+          Meus animais
+        </NavLink>
+        <NavLink
+          className="menu-item"
+          activeClassName="selected"
+          to="/animais-ong"
+        >
+          <FiArrowRight />
+          Animais da Ong
+        </NavLink>
+        <NavLink
+          className="menu-item"
+          activeClassName="selected"
+          to="/minhas-campanhas"
+        >
+          <FiArrowRight />
+          Minhas Campanhas
+        </NavLink>
+        <NavLink
+          style={{ paddingBottom: '36px' }}
+          className="menu-item bordertop"
+          onClick={signOut}
+          to="/"
+        >
           <FiLogOut />
           Sair
         </NavLink>

@@ -9,7 +9,7 @@ interface ContainerProps {
 }
 
 export const Container = styled.div<ContainerProps>`
-  background-color: #fbfbfb;
+  background-color: #fff;
 
   /* filter: drop-shadow(0px 2px 10px rgba(0, 0, 0, 0.25)); */
   border-radius: 8px;

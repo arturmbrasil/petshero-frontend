@@ -57,30 +57,6 @@ const DetalheAnimalPerdido: React.FC<DetailProps> = ({ match }) => {
     {} as LostAnimal,
   );
 
-  const handleClickAnimalPerdido = useCallback(
-    (animal: LostAnimal) => {
-      history.push(`/animais-perdidos/${animal.id}`);
-    },
-    [history],
-  );
-
-  const handleInputFocus = useCallback(() => {
-    setIsFocused(true);
-  }, []);
-
-  const handleInputBlur = useCallback(() => {
-    setIsFocused(false);
-  }, []);
-
-  const handlePesquisa = useCallback((e) => {
-    console.log(e.target.value);
-    setPesquisa(e.target.value);
-  }, []);
-
-  const handleChangeFiltro = useCallback((event) => {
-    setFiltro(event.target.value);
-  }, []);
-
   useEffect(() => {
     api
       .get(`/lost-animals`, { params: { id: match?.params?.id } })

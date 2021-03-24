@@ -96,7 +96,7 @@ const Endereco: React.FC = () => {
   );
 
   const handleGoBack = useCallback(() => {
-    history.push('/perfil');
+    history.goBack();
   }, [history]);
 
   return (

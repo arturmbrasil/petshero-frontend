@@ -11,6 +11,9 @@ import Endereco from '../pages/Perfil/Endereco';
 import AnimaisPerdidos from '../pages/AnimaisPerdidos';
 import DetalheAnimalPerdido from '../pages/DetalheAnimalPerdido';
 import AnimaisEncontrados from '../pages/AnimaisEncontrados';
+import MeusAnimais from '../pages/MeusAnimais';
+import NovoAnimalPerdido from '../pages/NovoAnimalPerdido';
+import EditarAnimalPerdido from '../pages/EditarAnimalPerdido';
 
 const Routes: React.FC = () => {
   return (
@@ -43,6 +46,21 @@ const Routes: React.FC = () => {
         path="/animais-encontrados"
         exact
         component={AnimaisEncontrados}
+        isPrivate
+      />
+
+      <Route path="/meus-animais" exact component={MeusAnimais} isPrivate />
+      <Route
+        path="/meus-animais/novo"
+        exact
+        component={NovoAnimalPerdido}
+        isPrivate
+      />
+
+      <Route
+        path="/meus-animais/editar/:id"
+        exact
+        component={EditarAnimalPerdido}
         isPrivate
       />
     </Switch>
