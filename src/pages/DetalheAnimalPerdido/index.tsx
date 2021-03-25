@@ -84,9 +84,9 @@ const DetalheAnimalPerdido: React.FC<DetailProps> = ({ match }) => {
         <Header />
 
         <Content isFocused={isFocused}>
-          <Link to="/animais-perdidos">
+          {/* <Link to="/animais-perdidos">
             <FiArrowLeftCircle size={32} />
-          </Link>
+          </Link> */}
           {lostAnimal ? (
             <Detalhes>
               <h1>{lostAnimal.name}</h1>

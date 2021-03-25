@@ -14,6 +14,7 @@ import AnimaisEncontrados from '../pages/AnimaisEncontrados';
 import MeusAnimais from '../pages/MeusAnimais';
 import NovoAnimalPerdido from '../pages/NovoAnimalPerdido';
 import EditarAnimalPerdido from '../pages/EditarAnimalPerdido';
+import AnimaisAdocao from '../pages/AnimaisAdocao';
 
 const Routes: React.FC = () => {
   return (
@@ -63,6 +64,8 @@ const Routes: React.FC = () => {
         component={EditarAnimalPerdido}
         isPrivate
       />
+
+      <Route path="/adocao" exact component={AnimaisAdocao} isPrivate />
     </Switch>
   );
 };

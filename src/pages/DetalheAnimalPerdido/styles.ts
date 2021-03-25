@@ -49,6 +49,7 @@ export const Content = styled.div<InfoProps>`
 
 export const Detalhes = styled.div`
   margin-bottom: 16px;
+  margin-top: 55px;
 
   a {
     display: block;
