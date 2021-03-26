@@ -3,7 +3,12 @@ import { FiSearch } from 'react-icons/fi';
 
 import { Link, useHistory } from 'react-router-dom';
 import { MenuItem, Select } from '@material-ui/core';
-import { Container, Content, ListaAnimaisAdocao, AnimalAdocao } from './styles';
+import {
+  Container,
+  Content,
+  ListaAnimaisAdotados,
+  AnimalAdocao,
+} from './styles';
 
 import NavBar from '../../components/NavBar';
 
@@ -28,7 +33,7 @@ interface Animal {
   ong: { name: string };
 }
 
-const AnimaisAdocao: React.FC = () => {
+const AnimaisAdotados: React.FC = () => {
   const { user, updateUser } = useAuth();
   const [pesquisa, setPesquisa] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -63,11 +68,9 @@ const AnimaisAdocao: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    api
-      .get(`/ongs/animals`, { params: { adopted: false } })
-      .then((response) => {
-        setAnimals(response.data);
-      });
+    api.get(`/ongs/animals`, { params: { adopted: true } }).then((response) => {
+      setAnimals(response.data);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -79,15 +82,12 @@ const AnimaisAdocao: React.FC = () => {
 
         <Content isFocused={isFocused}>
           <h1>
-            Animais para Adoção{' '}
+            Adotados!{' '}
             <span aria-label="sad-cat" role="img">
               😻
             </span>
           </h1>
-          <p>
-            Todos esses animais estão para adoção! Nos ajude a encontrar um lar
-            para eles!
-          </p>
+          <p>Esses animais já estão em um lar recebendo muito carinho!</p>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <h4 style={{ marginRight: '16px' }}>Pesquisar por:</h4>
             <Select
@@ -118,10 +118,10 @@ const AnimaisAdocao: React.FC = () => {
               onChange={handlePesquisa}
             />
           </div>
-          <Link className="animaisEncontrados" to="/adotados">
-            Ver animais que já foram adotados
+          <Link className="animaisEncontrados" to="/adocao">
+            Ver animais que estão para adoção
           </Link>
-          <ListaAnimaisAdocao>
+          <ListaAnimaisAdotados>
             {animals
               .filter((animalFiltrado) => {
                 if (filtro === 'Nome') {
@@ -163,11 +163,11 @@ const AnimaisAdocao: React.FC = () => {
                   <h6>{animal.ong.name}</h6>
                 </AnimalAdocao>
               ))}
-          </ListaAnimaisAdocao>
+          </ListaAnimaisAdotados>
         </Content>
       </div>
     </Container>
   );
 };
 
-export default AnimaisAdocao;
+export default AnimaisAdotados;

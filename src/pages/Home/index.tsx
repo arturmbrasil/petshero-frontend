@@ -52,6 +52,13 @@ const Home: React.FC = () => {
     [history],
   );
 
+  const handleClickAnimalAdocao = useCallback(
+    (animal: AdoptionAnimal) => {
+      history.push(`/adocao/${animal.id}`);
+    },
+    [history],
+  );
+
   useEffect(() => {
     api
       .get(`/lost-animals`, {
@@ -134,14 +141,14 @@ const Home: React.FC = () => {
             <>
               <p>
                 Todos esses animais estão para adoção! Nos ajude a encontrar um
-                lar para eles
+                lar para eles!
               </p>
               <Lista>
                 {adoptionAnimals.map((animal, index) => (
                   <Card
                     // eslint-disable-next-line react/no-array-index-key
                     key={index}
-                    onClick={() => handleClickAnimalPerdido(animal)}
+                    onClick={() => handleClickAnimalAdocao(animal)}
                   >
                     <img src={animal.avatar_url || dogImg} alt={animal.name} />
                     <h3>{animal.name}</h3>

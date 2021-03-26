@@ -21,8 +21,9 @@ import api from '../../services/api';
 import dogImg from '../../assets/default.png';
 import ScrollToTop from '../../components/ScrollToTop';
 
-interface LostAnimal {
+interface Animal {
   id: string;
+  ong_id: string;
   name: string;
   age: string;
   gender: string;
@@ -30,14 +31,15 @@ interface LostAnimal {
   species: string;
   breed: string;
   description: string;
-  found: boolean;
+  adopted: boolean;
   updated_at: string;
   avatar_url: string | null;
-  owner: {
+  ong: {
     name: string;
     whatsapp: string;
   };
   linkWhats: string;
+  mailTo: string;
 }
 
 type DetailParams = {
@@ -45,7 +47,7 @@ type DetailParams = {
 };
 type DetailProps = RouteComponentProps<DetailParams>;
 
-const DetalheAnimalPerdido: React.FC<DetailProps> = ({ match }) => {
+const DetalheAdocao: React.FC<DetailProps> = ({ match }) => {
   const { user, updateUser } = useAuth();
   const [pesquisa, setPesquisa] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -53,13 +55,11 @@ const DetalheAnimalPerdido: React.FC<DetailProps> = ({ match }) => {
 
   const history = useHistory();
 
-  const [lostAnimal, setLostAnimal] = useState<LostAnimal | null>(
-    {} as LostAnimal,
-  );
+  const [animal, setAnimal] = useState<Animal | null>({} as Animal);
 
   useEffect(() => {
     api
-      .get(`/lost-animals`, { params: { id: match?.params?.id } })
+      .get(`/ongs/animals`, { params: { id: match?.params?.id } })
       .then((response) => {
         if (response.data[0].updated_at) {
           response.data[0].updated_at = format(
@@ -67,11 +67,13 @@ const DetalheAnimalPerdido: React.FC<DetailProps> = ({ match }) => {
             'dd/MM/yyyy HH:mm',
           );
         }
-        response.data[0].linkWhats = `https://api.whatsapp.com/send?phone=${response.data[0].owner.whatsapp}&text=Ol%C3%A1%20${response.data[0].owner.name}!%20Vi%20que%20o(a)%20${response.data[0].name}%20est%C3%A1%20perdido(a)%2C%20acho%20que%20posso%20te%20ajudar!`;
-        setLostAnimal(response.data[0]);
+        response.data[0].linkWhats = `https://api.whatsapp.com/send?phone=${response.data[0].ong.whatsapp}&text=Ol%C3%A1%20${response.data[0].ong.name}!%20Vi%20que%20o(a)%20${response.data[0].name}%20est%C3%A1%20para%20ado%C3%A7%C3%A3o!`;
+        response.data[0].mailTo = `mailto:${response.data[0].ong.email}`;
+        setAnimal(response.data[0]);
+        console.log(response.data[0]);
       })
       .catch((err) => {
-        setLostAnimal(null);
+        setAnimal(null);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -87,28 +89,42 @@ const DetalheAnimalPerdido: React.FC<DetailProps> = ({ match }) => {
           {/* <Link to="/animais-perdidos">
             <FiArrowLeftCircle size={32} />
           </Link> */}
-          {lostAnimal ? (
+          {animal ? (
             <Detalhes>
-              <h1>{lostAnimal.name}</h1>
-              <p>Espécie: {lostAnimal.species}</p>
-              <p>Raça: {lostAnimal.breed}</p>
-              <p>Sexo: {lostAnimal.gender}</p>
-              <p>Porte: {lostAnimal.size}</p>
-              <p>Idade: {lostAnimal.age}</p>
-              <p>Descrição: {lostAnimal.description}</p>
-              {!lostAnimal.found ? (
-                <a target="_blank" rel="noreferrer" href={lostAnimal.linkWhats}>
-                  Acha que encontrou esse animal? Clique aqui para entrar em
-                  contato!
-                </a>
+              <h1>{animal.name}</h1>
+              <p style={{ marginBottom: '16px', color: '#777' }}>
+                Ver página da ONG:{' '}
+                <Link
+                  style={{ display: 'inline', color: '#f09f7d' }}
+                  to={`ongs/${animal.ong_id}`}
+                >
+                  {animal.ong?.name}
+                </Link>
+              </p>
+              <p>Espécie: {animal.species}</p>
+              <p>Raça: {animal.breed}</p>
+              <p>Sexo: {animal.gender}</p>
+              <p>Porte: {animal.size}</p>
+              <p>Idade: {animal.age}</p>
+              <p>Descrição: {animal.description}</p>
+
+              {!animal.adopted ? (
+                <>
+                  <a target="_blank" rel="noreferrer" href={animal.linkWhats}>
+                    Quero entrar em contato com a ONG via WhatsApp!
+                  </a>
+                  <a target="_blank" rel="noreferrer" href={animal.mailTo}>
+                    Quero entrar em contato com a ONG via Email!
+                  </a>
+                </>
               ) : (
-                <h3>Esse animal já foi encontrado!</h3>
+                <h3>
+                  Esse animal já foi adotado e já está em um lar recebendo muito
+                  carinho!
+                </h3>
               )}
-              <img
-                src={lostAnimal.avatar_url || dogImg}
-                alt={lostAnimal.name}
-              />
-              <p>Última atualização: {lostAnimal.updated_at}</p>
+              <img src={animal.avatar_url || dogImg} alt={animal.name} />
+              <p>Última atualização: {animal.updated_at}</p>
             </Detalhes>
           ) : (
             <>
@@ -123,4 +139,4 @@ const DetalheAnimalPerdido: React.FC<DetailProps> = ({ match }) => {
   );
 };
 
-export default withRouter(DetalheAnimalPerdido);
+export default withRouter(DetalheAdocao);

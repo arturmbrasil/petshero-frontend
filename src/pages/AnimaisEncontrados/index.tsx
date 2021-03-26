@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { MenuItem, Select } from '@material-ui/core';
 import {
   Container,
@@ -117,7 +117,9 @@ const AnimaisEncontrados: React.FC = () => {
               onChange={handlePesquisa}
             />
           </div>
-
+          <Link className="animaisEncontrados" to="/animais-perdidos">
+            Ver animais perdidos
+          </Link>
           <ListaAnimaisEncontrados>
             {lostAnimals
               .filter((animalFiltrado) => {
