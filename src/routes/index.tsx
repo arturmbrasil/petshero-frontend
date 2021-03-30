@@ -17,6 +17,9 @@ import EditarAnimalPerdido from '../pages/EditarAnimalPerdido';
 import AnimaisAdocao from '../pages/AnimaisAdocao';
 import AnimaisAdotados from '../pages/AnimaisAdotados';
 import DetalheAdocao from '../pages/DetalheAdocao';
+import MeusAnimaisOng from '../pages/MeusAnimaisOng';
+import NovoAnimalOng from '../pages/NovoAnimalOng';
+import EditarAnimalOng from '../pages/EditarAnimalOng';
 
 const Routes: React.FC = () => {
   return (
@@ -53,6 +56,7 @@ const Routes: React.FC = () => {
       />
 
       <Route path="/meus-animais" exact component={MeusAnimais} isPrivate />
+
       <Route
         path="/meus-animais/novo"
         exact
@@ -72,6 +76,22 @@ const Routes: React.FC = () => {
       <Route path="/adotados" exact component={AnimaisAdotados} isPrivate />
 
       <Route path="/adocao/:id" exact component={DetalheAdocao} isPrivate />
+
+      <Route path="/animais-ong" exact component={MeusAnimaisOng} isPrivate />
+
+      <Route
+        path="/animais-ong/novo"
+        exact
+        component={NovoAnimalOng}
+        isPrivate
+      />
+
+      <Route
+        path="/animais-ong/editar/:id"
+        exact
+        component={EditarAnimalOng}
+        isPrivate
+      />
     </Switch>
   );
 };

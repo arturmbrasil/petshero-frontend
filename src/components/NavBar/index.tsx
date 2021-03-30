@@ -67,7 +67,7 @@ const NavBar: React.FC = () => {
             to="/animais-ong"
           >
             <FiArrowRight />
-            Meus Animais
+            Animais da Ong
           </NavLink>
         )}
         {user.is_ong && (
