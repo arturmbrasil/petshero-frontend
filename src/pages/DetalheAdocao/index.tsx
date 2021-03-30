@@ -96,7 +96,7 @@ const DetalheAdocao: React.FC<DetailProps> = ({ match }) => {
                 Ver página da ONG:{' '}
                 <Link
                   style={{ display: 'inline', color: '#f09f7d' }}
-                  to={`ongs/${animal.ong_id}`}
+                  to={`/ongs/${animal.ong_id}`}
                 >
                   {animal.ong?.name}
                 </Link>

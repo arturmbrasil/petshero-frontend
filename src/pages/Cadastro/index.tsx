@@ -23,7 +23,7 @@ interface CadastroFormData {
   email: string;
   password: string;
   whatsapp: string;
-  isOng: boolean;
+  is_ong: boolean;
 }
 
 const Cadastro: React.FC = () => {
@@ -58,7 +58,9 @@ const Cadastro: React.FC = () => {
           abortEarly: false,
         });
 
-        data.isOng = isOng;
+        data.is_ong = isOng;
+
+        console.log(data);
 
         await api.post('/users', data);
 
