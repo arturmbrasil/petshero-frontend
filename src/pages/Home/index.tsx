@@ -45,6 +45,37 @@ interface Ongs {
   };
 }
 
+interface Campanhas {
+  id: string;
+  ong_id: string;
+  animal_id: string;
+  target_value: string;
+  received_value: string;
+  title: string;
+  description: string;
+  activated: string;
+  ong: {
+    id: string;
+    name: string;
+    whatsapp: string;
+    email: string;
+    avatar_url: string | null;
+  };
+  ongAnimal: {
+    id: string;
+    name: string;
+    age: string;
+    gender: string;
+    size: string;
+    species: string;
+    breed: string;
+    adopted: boolean;
+    description: string;
+    avatar_url: string | null;
+  };
+  avatar_url: string | null;
+}
+
 const Home: React.FC = () => {
   const { user, updateUser } = useAuth();
   const history = useHistory();
@@ -52,6 +83,7 @@ const Home: React.FC = () => {
   const [lostAnimals, setLostAnimals] = useState<LostAnimal[]>([]);
   const [adoptionAnimals, setAdoptionAnimals] = useState<AdoptionAnimal[]>([]);
   const [ongs, setOngs] = useState<Ongs[]>([]);
+  const [campanhas, setCampanhas] = useState<Campanhas[]>([]);
 
   // const breakPoints = [
   //   { width: 1, itemsToShow: 1 },
@@ -78,6 +110,13 @@ const Home: React.FC = () => {
   const handleClickOng = useCallback(
     (ong: Ongs) => {
       history.push(`/ongs/${ong.id}`);
+    },
+    [history],
+  );
+
+  const handleClickCampanha = useCallback(
+    (campanha: Campanhas) => {
+      history.push(`/campanhas/${campanha.id}`);
     },
     [history],
   );
@@ -114,6 +153,13 @@ const Home: React.FC = () => {
         const arrayNovo = response.data.slice(0, 5);
         setOngs(arrayNovo);
       } else setOngs(response.data);
+    });
+
+    api.get(`/campaigns`).then((response) => {
+      if (response.data.length > 5) {
+        const arrayNovo = response.data.slice(0, 5);
+        setCampanhas(arrayNovo);
+      } else setCampanhas(response.data);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -224,6 +270,38 @@ const Home: React.FC = () => {
                 ))}
               </Lista>
               <Link to="ongs">VER TODAS</Link>
+            </>
+          )}
+          <Divisor />
+
+          <h1>
+            Campanhas de arrecadação!{' '}
+            <span aria-label="money" role="img">
+              💰
+            </span>
+          </h1>
+
+          {campanhas.length === 0 ? (
+            <h1>Ainda não temos nenhuma campanha cadastrada...</h1>
+          ) : (
+            <>
+              <p>Doe para essas campanhas e ajude a causa!</p>
+              <Lista>
+                {campanhas.map((camp, index) => (
+                  <Card
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={index}
+                    onClick={() => handleClickCampanha(camp)}
+                  >
+                    <img src={camp.avatar_url || dogImg} alt={camp.title} />
+                    <h3>{camp.title}</h3>
+                    <h5>{camp.description}</h5>
+                    <h6>Meta: R${camp.target_value}</h6>
+                    <h6>Arrecadado: R${camp.received_value}</h6>
+                  </Card>
+                ))}
+              </Lista>
+              <Link to="campanhas">VER TODAS</Link>
             </>
           )}
         </Content>

@@ -21,6 +21,7 @@ import MeusAnimaisOng from '../pages/MeusAnimaisOng';
 import NovoAnimalOng from '../pages/NovoAnimalOng';
 import EditarAnimalOng from '../pages/EditarAnimalOng';
 import Ongs from '../pages/Ongs';
+import Campanhas from '../pages/Campanhas';
 
 const Routes: React.FC = () => {
   return (
@@ -95,6 +96,7 @@ const Routes: React.FC = () => {
       />
 
       <Route path="/ongs" exact component={Ongs} isPrivate />
+      <Route path="/campanhas" exact component={Campanhas} isPrivate />
     </Switch>
   );
 };
