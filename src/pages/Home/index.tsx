@@ -223,7 +223,7 @@ const Home: React.FC = () => {
                   </Card>
                 ))}
               </Lista>
-              <Link to="adocao">VER TODAS</Link>
+              <Link to="ongs">VER TODAS</Link>
             </>
           )}
         </Content>
