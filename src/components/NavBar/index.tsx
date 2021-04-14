@@ -19,9 +19,9 @@ import { Container } from './styles';
 const NavBar: React.FC = () => {
   const { signOut, user } = useAuth();
 
-  // useEffect(() => {
-  //   console.log(user);
-  // }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Container>
