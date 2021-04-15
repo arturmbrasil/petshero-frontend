@@ -13,6 +13,7 @@ import {
   FiCamera,
   FiArrowLeft,
   FiPhone,
+  FiDollarSign,
 } from 'react-icons/fi';
 
 import { FormHandles } from '@unform/core';
@@ -25,6 +26,7 @@ import {
   withRouter,
 } from 'react-router-dom';
 
+import { MenuItem, Select } from '@material-ui/core';
 import { Container, Content, AvatarInput } from './styles';
 import NavBar from '../../components/NavBar';
 
@@ -40,18 +42,15 @@ import { useAuth } from '../../hooks/auth';
 import defaultImg from '../../assets/default.png';
 
 interface FormData {
-  name: string;
-  age: string;
-  gender: string;
-  size: string;
-  species: string;
-  breed: string;
+  title: string;
   description: string;
+  target_value: string;
+  received_value: string;
+  animal_id: string;
 }
 
-interface AnimalOng {
+interface Animal {
   id: string;
-  ong_id: string;
   name: string;
   age: string;
   gender: string;
@@ -60,14 +59,39 @@ interface AnimalOng {
   breed: string;
   description: string;
   adopted: boolean;
-  updated_at: string;
   avatar_url: string | null;
+  ong: { name: string };
+}
+
+interface CampanhaInterface {
+  id: string;
+  ong_id: string;
+  animal_id: string;
+  target_value: string;
+  received_value: string;
+  title: string;
+  description: string;
+  activated: boolean;
   ong: {
+    id: string;
     name: string;
     whatsapp: string;
+    email: string;
+    avatar_url: string | null;
   };
-  linkWhats: string;
-  mailTo: string;
+  ongAnimal: {
+    id: string;
+    name: string;
+    age: string;
+    gender: string;
+    size: string;
+    species: string;
+    breed: string;
+    adopted: boolean;
+    description: string;
+    avatar_url: string | null;
+  };
+  avatar_url: string | null;
 }
 
 type DetailParams = {
@@ -75,14 +99,19 @@ type DetailParams = {
 };
 type DetailProps = RouteComponentProps<DetailParams>;
 
-const EditarAnimalOng: React.FC<DetailProps> = ({ match }) => {
+const EditarCampanh: React.FC<DetailProps> = ({ match }) => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();
 
   const { user, updateUser } = useAuth();
 
-  const [animalOng, setAnimalOng] = useState<AnimalOng | null>({} as AnimalOng);
+  const [animal, setAnimal] = React.useState(null);
+  const [listaAnimais, setListaAnimais] = useState<Animal[]>([]);
+
+  const [campanha, setCampanha] = useState<CampanhaInterface | null>(
+    {} as CampanhaInterface,
+  );
 
   const handleSubmit = useCallback(
     async (data: FormData) => {
@@ -90,40 +119,35 @@ const EditarAnimalOng: React.FC<DetailProps> = ({ match }) => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-          age: Yup.string().required('Idade obrigatória'),
-          gender: Yup.string().required('Sexo obrigatório'),
-          size: Yup.string().required('Porte obrigatório'),
-          species: Yup.string().required('Espécie obrigatória'),
-          breed: Yup.string().required('Raça obrigatória'),
+          title: Yup.string().required('Título obrigatório'),
           description: Yup.string().required('Descrição obrigatória'),
+          target_value: Yup.string().required(
+            'Meta de arrecadação obrigatória',
+          ),
+          received_value: Yup.string().required('Valor arrecadado obrigatório'),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        const { name, age, gender, size, species, breed, description } = data;
+        const { title, description, target_value, received_value } = data;
 
         const formData = {
-          name,
-          age,
-          gender,
-          size,
-          species,
-          breed,
+          title,
           description,
+          target_value,
+          received_value,
+          animal_id: animal !== '0' ? animal : null,
         };
-        const response = await api.put(
-          `/ongs/animals/${animalOng?.id}`,
-          formData,
-        );
 
-        if (response.data.id) history.push(`/animais-ong`);
+        const response = await api.put(`/campaigns/${campanha?.id}`, formData);
+
+        if (response.data.id) history.push(`/minhas-campanhas`);
 
         addToast({
           type: 'success',
-          title: 'Animal atualizado!',
+          title: 'Campanha atualizada!',
           description: 'As informações foram atualizadas!',
         });
       } catch (error) {
@@ -138,11 +162,12 @@ const EditarAnimalOng: React.FC<DetailProps> = ({ match }) => {
         addToast({
           type: 'error',
           title: 'Erro',
-          description: 'Ocorreu um erro ao atualizar o animal, tente novamente',
+          description:
+            'Ocorreu um erro ao atualizar a campanha, tente novamente',
         });
       }
     },
-    [addToast, history, animalOng],
+    [animal, campanha, history, addToast],
   );
 
   const handleAvatarChange = useCallback(
@@ -153,60 +178,73 @@ const EditarAnimalOng: React.FC<DetailProps> = ({ match }) => {
         data.append('avatar', e.target.files[0]);
 
         api
-          .patch(`/ongs/animals/avatar/${animalOng?.id}`, data)
+          .patch(`/campaigns/animals/avatar/${campanha?.id}`, data)
           .then((response) => {
-            setAnimalOng(response.data);
+            setCampanha(response.data);
             addToast({
               type: 'success',
               title: 'Foto atualizada!',
-              description: 'Cadastramos a foto do seu animal!',
+              description: 'Cadastramos a foto da sua campanha!',
             });
           });
       }
     },
-    [addToast, animalOng],
+    [addToast, campanha],
   );
 
   const handleChangeStatus = useCallback(async () => {
-    if (animalOng?.adopted === true) {
+    if (campanha?.activated === true) {
       api
-        .put(`/ongs/animals/${animalOng?.id}`, {
-          adopted: false,
+        .put(`/campaigns/${campanha?.id}`, {
+          activated: false,
         })
         .then((response) => {
-          console.log(response.data.adopted);
+          console.log(response.data.activated);
 
-          setAnimalOng(response.data);
+          setCampanha(response.data);
           addToast({
             type: 'success',
             title: 'Status atualizado!',
-            description: 'O status do seu animal foi atualizado',
+            description: 'O status da sua campanha foi atualizado',
           });
         });
     } else {
       api
-        .put(`/ongs/animals/${animalOng?.id}`, {
-          adopted: true,
+        .put(`/campaigns/${campanha?.id}`, {
+          activated: true,
         })
         .then((response) => {
-          setAnimalOng(response.data);
+          setCampanha(response.data);
           addToast({
             type: 'success',
             title: 'Status atualizado!',
-            description: 'O status do seu animal foi atualizado',
+            description: 'O status da sua campanha foi atualizado',
           });
         });
     }
-  }, [addToast, animalOng]);
+  }, [addToast, campanha]);
+
+  const handleChangeAnimal = useCallback((event) => {
+    setAnimal(event.target.value);
+  }, []);
 
   useEffect(() => {
     api
-      .get(`/ongs/animals`, { params: { id: match?.params?.id } })
+      .get(`/campaigns`, { params: { id: match?.params?.id } })
       .then((response) => {
-        setAnimalOng(response.data[0]);
+        setCampanha(response.data[0]);
+        setAnimal(
+          response.data[0]?.animal_id ? response.data[0]?.animal_id : '0',
+        );
       })
       .catch((err) => {
-        setAnimalOng(null);
+        setCampanha(null);
+      });
+
+    api
+      .get(`/ongs/animals`, { params: { ong_id: user.id } })
+      .then((response) => {
+        setListaAnimais(response.data);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -223,20 +261,17 @@ const EditarAnimalOng: React.FC<DetailProps> = ({ match }) => {
             ref={formRef}
             onSubmit={handleSubmit}
             initialData={{
-              name: animalOng?.name,
-              age: animalOng?.age,
-              gender: animalOng?.gender,
-              size: animalOng?.size,
-              species: animalOng?.species,
-              breed: animalOng?.breed,
-              description: animalOng?.description,
+              title: campanha?.title,
+              description: campanha?.description,
+              target_value: campanha?.target_value,
+              received_value: campanha?.received_value,
             }}
           >
             <AvatarInput>
-              {animalOng?.avatar_url ? (
-                <img src={animalOng?.avatar_url} alt={animalOng?.name} />
+              {campanha?.avatar_url ? (
+                <img src={campanha?.avatar_url} alt={campanha?.title} />
               ) : (
-                <img src={defaultImg} alt={animalOng?.name} />
+                <img src={defaultImg} alt={campanha?.title} />
               )}
               <label htmlFor="avatar">
                 <FiCamera />
@@ -245,33 +280,64 @@ const EditarAnimalOng: React.FC<DetailProps> = ({ match }) => {
               </label>
             </AvatarInput>
 
-            <h1>Editar Animal da Ong</h1>
-
-            <h3>Nome</h3>
-            <Input name="name" placeholder="Nome" />
-            <h3>Idade</h3>
-            <Input name="age" placeholder="Idade" type="numeric" />
-            <h3>Sexo</h3>
-            <Input name="gender" placeholder="Sexo" />
-            <h3>Porte</h3>
-            <Input name="size" placeholder="Porte" />
-            <h3>Espécie</h3>
-            <Input name="species" placeholder="Espécie" />
-            <h3>Raça</h3>
-            <Input name="breed" placeholder="Raça" />
-            <h3>Descrição</h3>
+            <h1>Editar Campanha</h1>
+            <h3>Título da campanha *</h3>
+            <Input name="title" placeholder="Título" />
+            <h3>Descrição *</h3>
             <Input name="description" placeholder="Descrição" />
+            <h3>Meta de arrecadação *</h3>
+            <Input
+              name="target_value"
+              placeholder="Meta"
+              type="number"
+              inputMode="decimal"
+              step=".01"
+              icon={FiDollarSign}
+            />
+            <h3>Valor arrecadado *</h3>
+            <Input
+              name="received_value"
+              placeholder="Arrecadado"
+              type="number"
+              inputMode="decimal"
+              step=".01"
+              icon={FiDollarSign}
+            />
+            <h3>
+              Essa campanha é para algum animal? Se sim, selecione o animal
+            </h3>
+            <Select
+              labelId="select-label-animal_id"
+              id="simple-select-animal_id"
+              value={animal}
+              name="animal_id"
+              onChange={handleChangeAnimal}
+              style={{ textAlign: 'left' }}
+            >
+              <MenuItem key="0" value="0" style={{ padding: '10px' }}>
+                Selecione um animal
+              </MenuItem>
+              {listaAnimais.map((anim) => (
+                <MenuItem
+                  style={{ padding: '10px' }}
+                  key={anim.id}
+                  value={anim.id}
+                >
+                  {anim.name}
+                </MenuItem>
+              ))}
+            </Select>
 
             <h3>
-              Status: {animalOng?.adopted === true ? 'Adotado' : 'Não Adotado'}
+              Status: {campanha?.activated === true ? 'Ativa' : 'Inativa'}
             </h3>
-            {animalOng?.adopted === true ? (
+            {campanha?.activated === true ? (
               <Button
                 onClick={handleChangeStatus}
                 style={{ marginTop: '-8px' }}
                 type="button"
               >
-                Marcar como Não Adotado!
+                Desativar campanha!
               </Button>
             ) : (
               <Button
@@ -279,7 +345,7 @@ const EditarAnimalOng: React.FC<DetailProps> = ({ match }) => {
                 style={{ marginTop: '-8px' }}
                 type="button"
               >
-                Marcar como Adotado!
+                Ativar campanha!
               </Button>
             )}
             <Button type="submit">Atualizar</Button>
@@ -293,4 +359,4 @@ const EditarAnimalOng: React.FC<DetailProps> = ({ match }) => {
   );
 };
 
-export default withRouter(EditarAnimalOng);
+export default withRouter(EditarCampanh);
