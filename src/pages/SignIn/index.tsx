@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useCallback, useRef } from 'react';
 import { FiHash, FiKey, FiLogIn } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
@@ -74,7 +75,7 @@ const SignIn: React.FC = () => {
       <Content>
         <AnimationContainer>
           <Form ref={formRef} onSubmit={handleSubmit}>
-            <h1>NOME DO PROJETO</h1>
+            <h1>Pet's Hero!</h1>
             <Input name="email" icon={FiHash} placeholder="Email" />
 
             <Input
@@ -99,8 +100,8 @@ const SignIn: React.FC = () => {
       <PWAPrompt
         promptOnVisit={1}
         timesToShow={3}
-        copyTitle="Instalar o Projeto TCC"
-        copyBody="Para utilizar melhor o TCC, instale a nossa aplicação na sua tela inicial"
+        copyTitle="Instalar o Pet's Hero!"
+        copyBody="Para utilizar melhor o Pet's Hero, instale a nossa aplicação na sua tela inicial"
         copyShareButtonLabel="1) Pressione o botão 'Compartilhar'."
         copyAddHomeButtonLabel="2) Pressione 'Adicionar à Tela de Início'."
         copyClosePrompt="Fechar"

@@ -11,7 +11,7 @@ export const Container = styled.div`
   align-items: stretch;
 
   flex: 1;
-  background: url(${fundoImg}) no-repeat center;
+  background: url(${fundoImg}) no-repeat top;
   background-size: auto;
 
   img {
@@ -46,12 +46,13 @@ const appearFromRight = keyframes`
 
 export const AnimationContainer = styled.div`
   display: flex;
+  margin-top: -100px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   animation: ${appearFromRight} 1s;
   form {
-    margin: 80px 0;
+    margin: 10px 0 20px 0;
     width: 360px;
     text-align: center;
     div {
@@ -68,13 +69,12 @@ export const AnimationContainer = styled.div`
       text-shadow: -4px 4px 7px rgb(242 135 89 / 50%);
     }
     .checkbox {
-      color: #fff;
+      color: #f28759;
       font-size: 18px;
       font-weight: 700;
 
       input[type='checkbox'] {
         margin-right: 8px;
-
         transform: scale(1.5);
       }
     }

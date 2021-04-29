@@ -11,7 +11,7 @@ export const Container = styled.div`
   align-items: stretch;
 
   flex: 1;
-  background: url(${fundoImg}) no-repeat center;
+  background: url(${fundoImg}) no-repeat top;
   background-size: auto;
 `;
 
@@ -37,12 +37,13 @@ const appearFromLeft = keyframes`
 
 export const AnimationContainer = styled.div`
   display: flex;
+  margin-top: -100px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   animation: ${appearFromLeft} 1s;
   form {
-    margin: 80px 0;
+    margin: 10px 0 20px 0;
     width: 360px;
     text-align: center;
     h1 {

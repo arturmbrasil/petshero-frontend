@@ -1,7 +1,7 @@
 {
   apps : [
     {
-      name      : "tcc",
+      name      : "Pet's Hero!",
       script    : "npx",
       interpreter: "none",
       args: "serve -s build -p 3000"

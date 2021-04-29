@@ -25,6 +25,7 @@ import Campanhas from '../pages/Campanhas';
 import MinhasCampanhas from '../pages/MinhasCampanhas';
 import NovaCampanha from '../pages/NovaCampanha';
 import EditarCampanha from '../pages/EditarCampanha';
+import DetalheOng from '../pages/DetalheOng';
 
 const Routes: React.FC = () => {
   return (
@@ -121,6 +122,8 @@ const Routes: React.FC = () => {
         component={EditarCampanha}
         isPrivate
       />
+
+      <Route path="/ongs/:id" exact component={DetalheOng} isPrivate />
     </Switch>
   );
 };
