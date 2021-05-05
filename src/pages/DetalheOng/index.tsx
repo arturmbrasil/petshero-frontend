@@ -19,6 +19,7 @@ import {
   ListaMeusAnimais,
   Animal,
   Divisor,
+  Campanha,
 } from './styles';
 import logoImg from '../../assets/logo.png';
 
@@ -44,6 +45,37 @@ interface Animal {
   adopted: boolean;
   avatar_url: string | null;
   ong: { name: string };
+}
+
+interface CampanhaInterface {
+  id: string;
+  ong_id: string;
+  animal_id: string;
+  target_value: string;
+  received_value: string;
+  title: string;
+  description: string;
+  activated: boolean;
+  ong: {
+    id: string;
+    name: string;
+    whatsapp: string;
+    email: string;
+    avatar_url: string | null;
+  };
+  ongAnimal: {
+    id: string;
+    name: string;
+    age: string;
+    gender: string;
+    size: string;
+    species: string;
+    breed: string;
+    adopted: boolean;
+    description: string;
+    avatar_url: string | null;
+  };
+  avatar_url: string | null;
 }
 
 interface Ongs {
@@ -82,10 +114,18 @@ const DetalheOng: React.FC<DetailProps> = ({ match }) => {
 
   const [ong, setOng] = useState<Ongs | null>({} as Ongs);
   const [animais, setAnimais] = useState<Animal[]>([]);
+  const [campanhas, setCampanhas] = useState<CampanhaInterface[]>([]);
 
   const handleClickAnimal = useCallback(
     (animal: Animal) => {
       history.push(`/adocao/${animal.id}`);
+    },
+    [history],
+  );
+
+  const handleClickCampanha = useCallback(
+    (camp: CampanhaInterface) => {
+      history.push(`/campanhas/${camp.id}`);
     },
     [history],
   );
@@ -139,6 +179,17 @@ const DetalheOng: React.FC<DetailProps> = ({ match }) => {
       })
       .catch((err) => {
         setAnimais([]);
+      });
+
+    api
+      .get(`/campaigns`, {
+        params: { ong_id: match?.params?.id, activated: 'true' },
+      })
+      .then((response) => {
+        if (response.data.length > 5) {
+          const arrayNovo = response.data.slice(0, 5);
+          setCampanhas(arrayNovo);
+        } else setCampanhas(response.data);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -227,64 +278,80 @@ const DetalheOng: React.FC<DetailProps> = ({ match }) => {
                     {/* <p>Você viu algum desses animais? Pode nos ajudar a encontrá-los?</p> */}
 
                     <ListaMeusAnimais>
-                      {animais
-                        .filter((animalFiltrado) => {
-                          if (filtro === 'Nome') {
-                            if (
-                              animalFiltrado.name
-                                .toUpperCase()
-                                .includes(pesquisa.toUpperCase())
-                            )
-                              return animalFiltrado;
-                          } else if (filtro === 'Especie') {
-                            if (
-                              animalFiltrado.species
-                                .toUpperCase()
-                                .includes(pesquisa.toUpperCase())
-                            )
-                              return animalFiltrado;
-                          } else if (filtro === 'Raca') {
-                            if (
-                              animalFiltrado.breed
-                                .toUpperCase()
-                                .includes(pesquisa.toUpperCase())
-                            )
-                              return animalFiltrado;
-                          }
-                          return null;
-                          // relatorio.nome.toUpperCase().includes(pesquisa.toUpperCase()),
-                        })
-                        .map((animal) => (
-                          <Animal
-                            key={animal.id}
-                            onClick={() => handleClickAnimal(animal)}
-                          >
-                            {animal.adopted && (
-                              <h2
-                                style={{
-                                  position: 'absolute',
-                                  fontFamily: 'Open Sans, sans-serif',
-                                  background: 'rgb(242, 135, 89, 0.8)',
-                                  padding: '0 32px 0 32px',
-                                  color: 'white',
-                                  width: '200px',
-                                  textAlign: 'center',
-                                }}
-                              >
-                                Adotado!
-                              </h2>
-                            )}
-                            <img
-                              src={animal.avatar_url || dogImg}
-                              alt={animal.name}
-                            />
-                            <h3>{animal.name}</h3>
-                            <h5>
-                              {animal.species}, {animal.breed}
-                            </h5>
-                            <h5>{animal.description}</h5>
-                          </Animal>
-                        ))}
+                      {animais.map((animal) => (
+                        <Animal
+                          key={animal.id}
+                          onClick={() => handleClickAnimal(animal)}
+                        >
+                          {animal.adopted && (
+                            <h2
+                              style={{
+                                position: 'absolute',
+                                fontFamily: 'Open Sans, sans-serif',
+                                background: 'rgb(242, 135, 89, 0.8)',
+                                padding: '0 32px 0 32px',
+                                color: 'white',
+                                width: '200px',
+                                textAlign: 'center',
+                              }}
+                            >
+                              Adotado!
+                            </h2>
+                          )}
+                          <img
+                            src={animal.avatar_url || dogImg}
+                            alt={animal.name}
+                          />
+                          <h3>{animal.name}</h3>
+                          <h5>
+                            {animal.species}, {animal.breed}
+                          </h5>
+                          <h5>{animal.description}</h5>
+                        </Animal>
+                      ))}
+                    </ListaMeusAnimais>
+                  </ContentAnimal>
+                </div>
+              )}
+
+              {campanhas.length !== 0 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    textAlign: 'start',
+                    marginTop: '24px',
+                    marginBottom: '96px',
+                  }}
+                >
+                  <Divisor />
+                  <ContentAnimal isFocused={isFocused}>
+                    <h1>Campanhas da Ong (últimas atualizações)</h1>
+                    {/* <p>Você viu algum desses animais? Pode nos ajudar a encontrá-los?</p> */}
+
+                    <ListaMeusAnimais>
+                      {campanhas.map((camp) => (
+                        <Campanha
+                          key={camp.id}
+                          onClick={() => handleClickCampanha(camp)}
+                        >
+                          <img
+                            src={camp.avatar_url || dogImg}
+                            alt={camp.title}
+                          />
+                          <h3>{camp.title}</h3>
+                          <h5>{camp.description}</h5>
+                          <h5 style={{ marginTop: '3px' }}>
+                            <span aria-label="money" role="img">
+                              🐾
+                            </span>{' '}
+                            {camp.ongAnimal?.name} - {camp.ong.name}
+                          </h5>
+                          {/* <h5 style={{ marginBottom: '3px' }}>- {camp.ong.name}</h5> */}
+                          <h6>Meta: R${camp.target_value}</h6>
+                          <h6>Arrecadado: R${camp.received_value}</h6>
+                        </Campanha>
+                      ))}
                     </ListaMeusAnimais>
                   </ContentAnimal>
                 </div>

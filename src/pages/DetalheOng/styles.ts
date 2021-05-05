@@ -201,3 +201,54 @@ export const Divisor = styled.div`
   /* margin-bottom: 32px; */
   opacity: 0.2;
 `;
+
+export const Campanha = styled.div`
+  cursor: pointer;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 8px 0px #cdcdcd;
+  margin: 8px;
+
+  img {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    box-shadow: 0px 0px 3px 0px #cdcdcd;
+    border-radius: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  h3 {
+    color: #f28759;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  h5 {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: #333333;
+  }
+
+  h6 {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    color: #bbb;
+    margin-top: 4px;
+  }
+`;
