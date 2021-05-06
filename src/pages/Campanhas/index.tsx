@@ -80,9 +80,13 @@ const Campanhas: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    api.get(`/campaigns`).then((response) => {
-      setCampanhas(response.data);
-    });
+    api
+      .get(`/campaigns`, {
+        params: { activated: 'true' },
+      })
+      .then((response) => {
+        setCampanhas(response.data);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
