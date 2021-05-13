@@ -1,7 +1,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FiArrowLeft, FiMail, FiLock, FiUser, FiPhone } from 'react-icons/fi';
+import {
+  FiArrowLeft,
+  FiMail,
+  FiLock,
+  FiUser,
+  FiPhone,
+  FiKey,
+} from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -23,6 +30,7 @@ interface CadastroFormData {
   email: string;
   password: string;
   whatsapp: string;
+  pix: string;
   is_ong: boolean;
 }
 
@@ -42,21 +50,37 @@ const Cadastro: React.FC = () => {
       try {
         formRef.current?.setErrors({});
 
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-          whatsapp: Yup.string()
-            .matches(phoneRegExp, 'Formato(xx xxxxx-xxxx)')
-            .required('WhatsApp obrigatório'),
-          email: Yup.string()
-            .required('E-mail obrigatório')
-            .email('Digite um e-mail válido'),
+        if (isOng) {
+          const schema = Yup.object().shape({
+            name: Yup.string().required('Nome obrigatório'),
+            whatsapp: Yup.string()
+              .matches(phoneRegExp, 'Formato(xx xxxxx-xxxx)')
+              .required('WhatsApp obrigatório'),
+            email: Yup.string()
+              .required('E-mail obrigatório')
+              .email('Digite um e-mail válido'),
+            pix: Yup.string().required('Chave PIX obrigatória'),
+            password: Yup.string().min(6, 'No mínimo 6 digitos'),
+          });
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+        } else {
+          const schema = Yup.object().shape({
+            name: Yup.string().required('Nome obrigatório'),
+            whatsapp: Yup.string()
+              .matches(phoneRegExp, 'Formato(xx xxxxx-xxxx)')
+              .required('WhatsApp obrigatório'),
+            email: Yup.string()
+              .required('E-mail obrigatório')
+              .email('Digite um e-mail válido'),
 
-          password: Yup.string().min(6, 'No mínimo 6 digitos'),
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
-        });
+            password: Yup.string().min(6, 'No mínimo 6 digitos'),
+          });
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+        }
 
         data.is_ong = isOng;
 
@@ -113,6 +137,8 @@ const Cadastro: React.FC = () => {
               type="password"
               placeholder="Senha"
             />
+
+            {isOng && <Input name="pix" icon={FiKey} placeholder="Chave Pix" />}
 
             <label className="checkbox">
               <input

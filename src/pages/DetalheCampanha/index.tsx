@@ -61,6 +61,7 @@ interface CampanhaInterface {
     name: string;
     whatsapp: string;
     email: string;
+    pix: string;
     avatar_url: string | null;
   };
   ongAnimal: {
@@ -84,6 +85,7 @@ interface Ongs {
   email: string;
   address_id: string;
   whatsapp: string;
+  pix: string;
   avatar_url: string | null;
   address: {
     street: string;
@@ -248,7 +250,7 @@ const DetalheCampanha: React.FC<DetailProps> = ({ match }) => {
                 <h1 style={{ fontSize: '24px' }}>
                   Quer nos ajudar nessa campanha? <br />
                   Nossa chave PIX é: <br />
-                  pix_aqui
+                  {campanha?.ong?.pix}
                 </h1>
               </div>
             </Detalhes>

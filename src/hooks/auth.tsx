@@ -6,6 +6,7 @@ interface User {
   name: string;
   email: string;
   whatsapp: string;
+  pix: string;
   avatar_url: string;
   is_ong: boolean;
   address?: {

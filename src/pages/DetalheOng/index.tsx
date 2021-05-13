@@ -84,6 +84,7 @@ interface Ongs {
   email: string;
   address_id: string;
   whatsapp: string;
+  pix: string;
   avatar_url: string | null;
   address: {
     street: string;
@@ -259,7 +260,7 @@ const DetalheOng: React.FC<DetailProps> = ({ match }) => {
               >
                 <h1 style={{ fontSize: '24px' }}>
                   Nossa chave PIX é: <br />
-                  pix_aqui
+                  {ong.pix}
                 </h1>
               </div>
 

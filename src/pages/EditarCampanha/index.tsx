@@ -178,7 +178,7 @@ const EditarCampanh: React.FC<DetailProps> = ({ match }) => {
         data.append('avatar', e.target.files[0]);
 
         api
-          .patch(`/campaigns/animals/avatar/${campanha?.id}`, data)
+          .patch(`/campaigns/avatar/${campanha?.id}`, data)
           .then((response) => {
             setCampanha(response.data);
             addToast({

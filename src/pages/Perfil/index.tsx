@@ -13,6 +13,7 @@ import {
   FiCamera,
   FiArrowLeft,
   FiPhone,
+  FiKey,
 } from 'react-icons/fi';
 
 import { FormHandles } from '@unform/core';
@@ -38,6 +39,7 @@ interface ProfileFormData {
   name: string;
   whatsapp: string;
   email: string;
+  pix: string;
   old_password: string;
   password: string;
   password_confirmation: string;
@@ -59,37 +61,68 @@ const Perfil: React.FC = () => {
       try {
         formRef.current?.setErrors({});
 
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-          whatsapp: Yup.string()
-            .matches(phoneRegExp, 'Formato(xx xxxxx-xxxx)')
-            .required('WhatsApp obrigatório'),
-          email: Yup.string()
-            .required('E-mail obrigatório')
-            .email('Digite um e-mail válido'),
-          old_password: Yup.string(),
-          password: Yup.string().when('old_password', {
-            is: (val) => !!val.length,
-            then: Yup.string().min(6, 'No mínimo 6 digitos'),
-            otherwise: Yup.string(),
-          }),
-          password_confirmation: Yup.string()
-            .when('old_password', {
+        if (user.is_ong) {
+          const schema = Yup.object().shape({
+            name: Yup.string().required('Nome obrigatório'),
+            whatsapp: Yup.string()
+              .matches(phoneRegExp, 'Formato(xx xxxxx-xxxx)')
+              .required('WhatsApp obrigatório'),
+            email: Yup.string()
+              .required('E-mail obrigatório')
+              .email('Digite um e-mail válido'),
+            pix: Yup.string().required('Chave PIX obrigatória'),
+            old_password: Yup.string(),
+            password: Yup.string().when('old_password', {
               is: (val) => !!val.length,
               then: Yup.string().min(6, 'No mínimo 6 digitos'),
               otherwise: Yup.string(),
-            })
-            .oneOf([Yup.ref('password'), ''], 'Confirmação incorreta'),
-        });
+            }),
+            password_confirmation: Yup.string()
+              .when('old_password', {
+                is: (val) => !!val.length,
+                then: Yup.string().min(6, 'No mínimo 6 digitos'),
+                otherwise: Yup.string(),
+              })
+              .oneOf([Yup.ref('password'), ''], 'Confirmação incorreta'),
+          });
 
-        await schema.validate(data, {
-          abortEarly: false,
-        });
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+        } else {
+          const schema = Yup.object().shape({
+            name: Yup.string().required('Nome obrigatório'),
+            whatsapp: Yup.string()
+              .matches(phoneRegExp, 'Formato(xx xxxxx-xxxx)')
+              .required('WhatsApp obrigatório'),
+            email: Yup.string()
+              .required('E-mail obrigatório')
+              .email('Digite um e-mail válido'),
+            old_password: Yup.string(),
+            password: Yup.string().when('old_password', {
+              is: (val) => !!val.length,
+              then: Yup.string().min(6, 'No mínimo 6 digitos'),
+              otherwise: Yup.string(),
+            }),
+            password_confirmation: Yup.string()
+              .when('old_password', {
+                is: (val) => !!val.length,
+                then: Yup.string().min(6, 'No mínimo 6 digitos'),
+                otherwise: Yup.string(),
+              })
+              .oneOf([Yup.ref('password'), ''], 'Confirmação incorreta'),
+          });
+
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+        }
 
         const {
           name,
           whatsapp,
           email,
+          pix,
           old_password,
           password,
           password_confirmation,
@@ -99,6 +132,7 @@ const Perfil: React.FC = () => {
           name,
           whatsapp,
           email,
+          pix,
           ...(old_password
             ? {
                 old_password,
@@ -179,6 +213,7 @@ const Perfil: React.FC = () => {
               name: user.name,
               whatsapp: user.whatsapp,
               email: user.email,
+              pix: user.pix,
             }}
           >
             <AvatarInput>
@@ -199,6 +234,10 @@ const Perfil: React.FC = () => {
             <Input name="name" icon={FiUser} placeholder="Nome" />
             <Input name="whatsapp" icon={FiPhone} placeholder="WhatsApp" />
             <Input name="email" icon={FiMail} placeholder="E-mail" />
+
+            {user.is_ong && (
+              <Input name="pix" icon={FiKey} placeholder="Chave Pix" />
+            )}
 
             <Input
               name="old_password"
