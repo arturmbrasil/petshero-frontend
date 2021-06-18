@@ -170,7 +170,7 @@ const Perfil: React.FC = () => {
         });
       }
     },
-    [addToast, history, phoneRegExp, updateUser],
+    [addToast, history, phoneRegExp, updateUser, user.is_ong],
   );
 
   const handleAvatarChange = useCallback(
